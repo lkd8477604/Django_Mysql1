@@ -1,5 +1,6 @@
 from django.db import models
-
+from datetime import datetime
+from django.utils.html import format_html
 # Create your models here.
 class book_autor(models.Model):
     name = models.CharField(max_length=32)
@@ -19,23 +20,19 @@ class book(models.Model):
     authors = models.CharField(max_length=12)
     publisher = models.CharField(max_length=64)
     price = models.IntegerField()
+    publishday = models.DateTimeField(default=datetime.now())
+    status_choice = (('published', u'已出版'),
+                     ('publishing', u'待出版'),
+                     ('forbiden', u'禁书'),)
+    statue =models.CharField(choices=status_choice, max_length=24, default='publishing')
     def __str__(self):
         return "%s" % (self.name)
 
-    class Meta:
-        # 数据库中生成的表名称 默认 app名称 + 下划线 + 类名
-        db_table = "table_name"
-
-        # 联合索引
-        index_together = [
-            ("pub_date", "deadline"),
-        ]
-
-        # 联合唯一索引
-        unique_together = (("driver", "restaurant"),)
-
-        # admin中显示的表名称
-        # verbose_name
-        #
-        # # verbose_name加s
-        # verbose_name_plural
+    def color_status(self):
+        if self.statue == 'published':
+            format_td = format_html('<span style="padding:2px;background-color:green;color:white">已出版</span>')
+        if self.statue == 'publishing':
+            format_td = format_html('<span style="padding:2px;background-color:gray;color:white">待出版</span>')
+        if self.statue == 'forbiden':
+            format_td = format_html('<span style="padding:2px;background-color:red;color:white">禁书</span>')
+        return format_td

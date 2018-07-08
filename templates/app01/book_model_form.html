@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .form-ele{padding: 20px}
+    </style>
+</head>
+<body>
+<form action="" method="post">{% csrf_token %}
+{#    {{ book_form }}#}
+    <div class="form-ele">
+         {% for i in book_form %}
+            <div class="form-ele">{{ i.name }} {{ i }} {{ i.errors }}</div>
+
+        {% endfor %}
+    </div>
+    <input value="提交" type="submit">
+</form>
+</body>
+</html>
